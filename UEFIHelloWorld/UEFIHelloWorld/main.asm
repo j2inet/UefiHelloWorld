@@ -101,7 +101,7 @@ printString PROC
 		RET
 printString ENDP
 
-
+extern delay:proc
 main PROC
 		SUB RSP, 10H*8	
 		mov [systemTable], RDX
@@ -114,28 +114,22 @@ main PROC
 
 		CALL waitForKey
 
-
 		LEA RAX, [szKeyReadPrefix]
 		CALL printString
 		
-		;MOV RCX, [systemTable]
-		;MOV RCX, [RCX + SYSTEM_TABLE.ConOut]
-		;LEA RDX, [szKeyReadPrefix]
-		;CALL QWORD PTR [RCX+TEXT_OUTPUT_INTERFACE.OutputString]
-
-		MOV RCX, [systemTable]
-		MOV RCX, [RCX + SYSTEM_TABLE.ConOut]
-		LEA RDX, [szGoodByeWorld]
-		CALL QWORD PTR [RCX+TEXT_OUTPUT_INTERFACE.OutputString]
-
+		LEA RAX, [szGoodByeWorld]
+		CALL printString
 	
 		MOV RCX, 1000000000H
-	delay_loop:
-		DEC RCX
-		JNZ delay_loop
+		call delay
+;	delay_loop:
+;		DEC RCX
+;		JNZ delay_loop
 		ADD RSP, 10H*8	
 		XOR RAX, RAX
 		RET 
+
+		call delay
 
 main ENDP
 
